@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banho e Tosa Dolly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ──  designe do sistema ──────────────────────────────── */
+    :root {
+      --pink:        #F9A8C9;
+      --pink-dark:   #E07FAA;
+      --pink-light:  #FDE8F2;
+      --cream:       #FFF8F2;
+      --brown:       #7C4A2D;
+      --brown-light: #C4895A;
+      --text:        #2D1A0E;
+      --text-muted:  #8A6A58;
+      --white:       #FFFFFF;
+      --radius:      16px;
+      --shadow:      0 4px 32px rgba(124,74,45,.10);
+      --ff-display:  'Playfair Display', serif;
+      --ff-body:     'DM Sans', sans-serif;
+      --transition:  .3s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--ff-body);
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── UTILITÁRIOS ──────────────────────────────────────────── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 50px; font-family: var(--ff-body);
+      font-weight: 500; font-size: 15px; cursor: pointer;
+      text-decoration: none; transition: var(--transition); border: none;
+    }
+    .btn-primary {
+      background: var(--brown); color: var(--white);
+    }
+    .btn-primary:hover { background: var(--brown-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,74,45,.25); }
+    .btn-outline {
+      background: transparent; color: var(--brown);
+      border: 2px solid var(--brown);
+    }
+    .btn-outline:hover { background: var(--brown); color: var(--white); transform: translateY(-2px); }
+
+    /* ── NAVBAR ───────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 16px 0;
+      background: rgba(255,248,242,.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(249,168,201,.25);
+      transition: var(--transition);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--pink); display: flex; align-items: center;
+      justify-content: center; font-size: 20px;
+    }
+    .nav-logo-text {
+      font-family: var(--ff-display); font-size: 18px;
+      color: var(--brown); line-height: 1.2;
+    }
+    .nav-logo-text span { display: block; font-size: 11px; font-family: var(--ff-body); color: var(--text-muted); font-weight: 400; letter-spacing: .5px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 14px; font-weight: 500; transition: color var(--transition); }
+    .nav-links a:hover { color: var(--brown); }
+    .nav-cta { display: flex; gap: 12px; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--brown); border-radius: 2px; transition: var(--transition); }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      padding-top: 100px; min-height: 100vh;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      /* Bolha decorativa de fundo */
+      content: ''; position: absolute;
+      top: -120px; right: -180px;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, #FDE8F2 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: center; width: 100%;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--pink-light); color: var(--pink-dark);
+      padding: 6px 16px; border-radius: 50px;
+      font-size: 13px; font-weight: 500; margin-bottom: 20px;
+    }
+    .hero-tag::before { content: '🐾'; font-size: 14px; }
+    h1 {
+      font-family: var(--ff-display);
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: 1.15; color: var(--brown);
+      margin-bottom: 20px;
+    }
+    h1 em { color: var(--pink-dark); font-style: normal; }
+    .hero-desc {
+      font-size: 18px; color: var(--text-muted);
+      max-width: 480px; margin-bottom: 36px; line-height: 1.8;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid rgba(124,74,45,.12);
+    }
+    .stat-value { font-family: var(--ff-display); font-size: 30px; color: var(--brown); }
+    .stat-label { font-size: 13px; color: var(--text-muted); }
+
+    /* Card ilustrativo do hero */
+    .hero-visual {
+      position: relative; display: flex;
+      justify-content: center; align-items: center;
+    }
+    .hero-card {
+      background: var(--white); border-radius: 28px;
+      padding: 32px; box-shadow: var(--shadow);
+      width: 100%; max-width: 420px; position: relative;
+    }
+    .hero-card-img {
+      width: 100%; height: 280px; border-radius: 18px;
+      object-fit: cover; background: var(--pink-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 80px; margin-bottom: 20px;
+    }
+    .badge-float {
+      position: absolute; background: var(--white);
+      border-radius: 14px; padding: 10px 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.1);
+      font-size: 13px; font-weight: 500;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .badge-float.top-left  { top: -16px; left: -20px; }
+    .badge-float.bot-right { bottom: 40px; right: -24px; }
+    .badge-dot { width: 8px; height: 8px; border-radius: 50%; background: #4CAF50; }
+
+    /* ── SERVIÇOS ──────────────────────────────────────────────── */
+    .services { padding: 96px 0; }
+    .section-label {
+      text-align: center; font-size: 13px; font-weight: 500;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--pink-dark); margin-bottom: 12px;
+    }
+    h2 {
+      font-family: var(--ff-display);
+      font-size: clamp(28px, 4vw, 44px);
+      color: var(--brown); text-align: center;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      text-align: center; color: var(--text-muted);
+      font-size: 17px; max-width: 560px; margin: 0 auto 56px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 32px 28px; box-shadow: var(--shadow);
+      transition: var(--transition); cursor: default;
+      border: 1.5px solid transparent;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--pink);
+      box-shadow: 0 12px 40px rgba(249,168,201,.25);
+    }
+    .service-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: var(--pink-light); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 26px; margin-bottom: 20px;
+    }
+    .service-card h3 { font-family: var(--ff-display); font-size: 20px; color: var(--brown); margin-bottom: 10px; }
+    .service-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+    .service-price {
+      margin-top: 20px; display: inline-block;
+      background: var(--pink-light); color: var(--pink-dark);
+      padding: 4px 14px; border-radius: 50px;
+      font-size: 13px; font-weight: 500;
+    }
+
+    /* ── SOBRE / DIFERENCIAIS ─────────────────────────────────── */
+    .about {
+      padding: 96px 0; background: var(--white);
+    }
+    .about-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .about-img {
+      border-radius: 28px; background: var(--pink-light);
+      height: 420px; display: flex; align-items: center;
+      justify-content: center; font-size: 100px; position: relative;
+    }
+    .about-img::after {
+      /* Detalhe de borda decorativa */
+      content: ''; position: absolute;
+      inset: -12px; border-radius: 32px;
+      border: 2px dashed var(--pink);
+      pointer-events: none;
+    }
+    .about-content h2 { text-align: left; }
+    .about-content .section-label { text-align: left; }
+    .about-content p { color: var(--text-muted); margin: 16px 0 32px; font-size: 16px; line-height: 1.8; }
+    .features { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .features li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; color: var(--text);
+    }
+    .feat-check {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--pink); flex-shrink: 0; margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--white); font-weight: 700;
+    }
+
+    /* ── DEPOIMENTOS ──────────────────────────────────────────── */
+    .testimonials { padding: 96px 0; }
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px; margin-top: 56px;
+    }
+    .testi-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 28px; box-shadow: var(--shadow);
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .stars { color: #F5A623; font-size: 16px; letter-spacing: 2px; }
+    .testi-text { font-size: 15px; color: var(--text-muted); line-height: 1.7; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--pink-light); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .testi-name { font-weight: 500; font-size: 14px; color: var(--brown); }
+    .testi-pet  { font-size: 12px; color: var(--text-muted); }
+
+    /* ── AGENDAMENTO ───────────────────────────────────── */
+    .booking {
+      padding: 96px 0; background: var(--brown);
+      position: relative; overflow: hidden;
+    }
+    .booking::before {
+      content: '🐾'; position: absolute;
+      font-size: 320px; opacity: .04;
+      top: -60px; right: -40px; line-height: 1;
+    }
+    .booking-inner { text-align: center; position: relative; }
+    .booking h2 { color: var(--white); margin-bottom: 16px; }
+    .booking p  { color: rgba(255,255,255,.7); font-size: 17px; margin-bottom: 40px; }
+    .booking-form {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      max-width: 600px; margin: 0 auto;
+    }
+    .booking-form input, .booking-form select {
+      flex: 1; min-width: 180px; padding: 14px 20px;
+      border-radius: 50px; border: none; font-family: var(--ff-body);
+      font-size: 14px; background: rgba(255,255,255,.12);
+      color: var(--white); outline: none;
+      transition: background var(--transition);
+    }
+    .booking-form input::placeholder { color: rgba(255,255,255,.5); }
+    .booking-form input:focus,
+    .booking-form select:focus { background: rgba(255,255,255,.2); }
+    .booking-form select option { color: var(--text); background: var(--white); }
+    .btn-white { background: var(--white); color: var(--brown); }
+    .btn-white:hover { background: var(--pink-light); transform: translateY(-2px); }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      background: var(--text); color: rgba(255,255,255,.6);
+      padding: 56px 0 32px;
+    }
+    .footer-inner {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand { }
+    .footer-logo-text {
+      font-family: var(--ff-display); font-size: 20px;
+      color: var(--white); margin-bottom: 14px;
+    }
+    .footer-desc { font-size: 14px; line-height: 1.7; max-width: 260px; }
+    footer h4 { color: var(--white); font-size: 14px; font-weight: 500; margin-bottom: 16px; }
+    footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    footer ul a { color: rgba(255,255,255,.55); text-decoration: none; font-size: 14px; transition: color var(--transition); }
+    footer ul a:hover { color: var(--pink); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 24px; display: flex;
+      justify-content: space-between; align-items: center;
+      font-size: 13px; flex-wrap: wrap; gap: 12px;
+    }
+    .social-links { display: flex; gap: 12px; }
+    .social-link {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,.08); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 15px; text-decoration: none;
+      transition: background var(--transition);
+    }
+    .social-link:hover { background: var(--pink); }
+
+    /* ── WHATSAPP FLOAT ───────────────────────────────────────── */
+    /* COLOCAR Botão flutuante: acesso rápido WhatsApp em qualquer scroll */
+    .wa-float {
+      position: fixed; bottom: 28px; right: 28px; z-index: 200;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25D366; display: flex;
+      align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,.4);
+      text-decoration: none; font-size: 26px;
+      animation: pulse 2.5s infinite;
+      transition: transform var(--transition);
+    }
+    .wa-float:hover { transform: scale(1.1); }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,.4); }
+      50%      { box-shadow: 0 4px 32px rgba(37,211,102,.7); }
+    }
+
+    /* ── ANIMAÇÕES DE SCROLL ──────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner, .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-visual { display: none; } /* (revisar) — ocultar no mobile pode esconder conteúdo relevante */
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .about-content h2, .about-content .section-label { text-align: center; }
+      .about-img::after { display: none; }
+      .hero-stats { gap: 20px; flex-wrap: wrap; }
+    }
+    @media (max-width: 560px) {
+      .footer-inner { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .booking-form { flex-direction: column; }
+      .booking-form input, .booking-form select { min-width: 0; }
+    }
+
+    /* ── MOBILE NAV MENU ─────────────────────────────────────── */
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 99;
+      background: var(--cream); display: flex;
+      flex-direction: column; align-items: center;
+      justify-content: center; gap: 32px;
+      transform: translateX(100%); transition: transform .35s ease;
+    }
+    .mobile-menu.open { transform: none; }
+    .mobile-menu a {
+      font-family: var(--ff-display); font-size: 28px;
+      color: var(--brown); text-decoration: none;
+    }
+    .mobile-close {
+      position: absolute; top: 24px; right: 24px;
+      font-size: 28px; background: none; border: none;
+      color: var(--brown); cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">🐩</div>
+      <div class="nav-logo-text">
+        Dolly
+        <span>Banho &amp; Tosa</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+
+    <div class="nav-cta">
+      <a href="tel:+5500000000000" class="btn btn-outline" style="padding:10px 22px; font-size:13px;">📞 Ligar</a>
+      <a href="#agendar" class="btn btn-primary" style="padding:10px 22px; font-size:13px;">Agendar agora</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#servicos"    onclick="closeMobile()">Serviços</a>
+  <a href="#sobre"       onclick="closeMobile()">Sobre</a>
+  <a href="#depoimentos" onclick="closeMobile()">Depoimentos</a>
+  <a href="#contato"     onclick="closeMobile()">Contato</a>
+  <a href="#agendar" class="btn btn-primary" onclick="closeMobile()">Agendar agora</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<section class="hero" id="inicio">
+  <div class="container hero-inner">
+
+    <div class="hero-content reveal">
+      <div class="hero-tag">Petshop em Curitiba</div>
+      <h1>O melhor<br/>cuidado para<br/>o seu <em>pet</em> 🐾</h1>
+      <p class="hero-desc">
+        Banho, tosa e muito carinho. Tratamos cada pet como se fosse nosso,
+        com profissionais certificados e produtos premium.
+      </p>
+      <div class="hero-actions">
+        <a href="#agendar" class="btn btn-primary">Agendar agora ↗</a>
+        <a href="#servicos" class="btn btn-outline">Ver serviços</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-value">+2.400</div>
+          <div class="stat-label">Pets atendidos</div>
+        </div>
+        <div>
+          <div class="stat-value">8 anos</div>
+          <div class="stat-label">De experiência</div>
+        </div>
+        <div>
+          <div class="stat-value">4.9 ⭐</div>
+          <div class="stat-label">Avaliação média</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal">
+      <div class="badge-float top-left">
+        <div class="badge-dot"></div>
+        Aberto agora 🕐 9h–18h
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-img">🐩</div>
+        <p style="font-family: var(--ff-display); font-size:18px; color:var(--brown); margin-bottom:6px;">Dolly está pronta!</p>
+        <p style="font-size:13px; color:var(--text-muted);">Produtos 100% naturais e hipoalergênicos</p>
+      </div>
+      <div class="badge-float bot-right">
+        🏆 Melhor petshop 2024
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SERVIÇOS
+════════════════════════════════════════════ -->
+<section class="services" id="servicos">
+  <div class="container">
+    <p class="section-label reveal">O que oferecemos</p>
+    <h2 class="reveal">Serviços completos<br/>para o seu pet</h2>
+    <p class="section-sub reveal">Do banho à tosa, cuidamos de tudo com atenção e carinho.</p>
+
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <div class="service-icon">🛁</div>
+        <h3>Banho completo</h3>
+        <p>Banho com shampoo premium, condicionador, secagem e escovação. Deixamos seu pet cheiroso e feliz.</p>
+        <span class="service-price">A partir de R$ 50</span>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">✂️</div>
+        <h3>Tosa higiênica</h3>
+        <p>Aparamos patas, focinho e orelhas com precisão. Ideal para manter o pelo saudável entre as tosas.</p>
+        <span class="service-price">A partir de R$ 40</span>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">💅</div>
+        <h3>Tosa completa</h3>
+        <p>Transformação total com corte personalizado para a raça do seu pet, por profissionais especializados.</p>
+        <span class="service-price">A partir de R$ 80</span>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🦷</div>
+        <h3>Limpeza dental</h3>
+        <p>Escovação e limpeza dos dentes para garantir saúde bucal e hálito fresco para o seu amiguinho.</p>
+        <span class="service-price">A partir de R$ 35</span>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🐾</div>
+        <h3>Pacote mensal</h3>
+        <p>Banho + tosa toda semana com preço fixo e agendamento prioritário. Economize e cuide bem.</p>
+        <span class="service-price">Sob consulta</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SOBRE
+════════════════════════════════════════════ -->
+<section class="about" id="sobre">
+  <div class="container about-inner">
+
+    <div class="about-img reveal">🐶</div>
+
+    <div class="about-content">
+      <p class="section-label reveal">Por que a Dolly?</p>
+      <h2 class="reveal">Tratamos com amor<br/>e profissionalismo</h2>
+      <p class="reveal">
+        Há mais de 8 anos cuidando de cães e gatos com carinho, responsabilidade
+        e técnica. Nossa equipe é treinada e certificada para oferecer o melhor
+        tratamento possível, sempre com segurança e bem-estar em primeiro lugar.
+      </p>
+      <ul class="features reveal">
+        <li><div class="feat-check">✓</div> Produtos 100% naturais e hipoalergênicos</li>
+        <li><div class="feat-check">✓</div> Profissionais certificados e experientes</li>
+        <li><div class="feat-check">✓</div> Ambiente climatizado e seguro</li>
+        <li><div class="feat-check">✓</div> Atendimento individualizado e personalizado</li>
+        <li><div class="feat-check">✓</div> Acompanhamento por fotos no WhatsApp</li>
+      </ul>
+      <a href="#agendar" class="btn btn-primary" style="margin-top:32px;">Agendar agora ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     DEPOIMENTOS
+════════════════════════════════════════════ -->
+<section class="testimonials" id="depoimentos">
+  <div class="container">
+    <p class="section-label reveal">O que dizem nossos clientes</p>
+    <h2 class="reveal">Pets felizes,<br/>donos ainda mais 🐾</h2>
+
+    <div class="testi-grid">
+
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"A Dolly é incrível! Minha Mel sempre volta cheirosa, arrumada e muito feliz. Não levo em outro lugar!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div>
+            <div class="testi-name">Ana Paula S.</div>
+            <div class="testi-pet">Dona da Mel 🐩</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Equipe super atenciosa e carinhosa com meu Bidu. Manda foto durante o banho, o que me deixa muito tranquila!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div>
+            <div class="testi-name">Fernanda L.</div>
+            <div class="testi-pet">Dona do Bidu 🐕</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Melhor custo-benefício do bairro. O Rex fica todo arrumado e cheiroso por um preço justo. Recomendo muito!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👨</div>
+          <div>
+            <div class="testi-name">Carlos M.</div>
+            <div class="testi-pet">Dono do Rex 🐕‍🦺</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     AGENDAMENTO / CTA
+════════════════════════════════════════════ -->
+<section class="booking" id="agendar">
+  <div class="container booking-inner">
+    <p class="section-label" style="color:rgba(255,255,255,.5); margin-bottom:8px;">Agendamento online</p>
+    <h2 class="reveal">Agende em menos<br/>de 2 minutos ✨</h2>
+    <p class="reveal">Escolha o serviço, deixe seu contato e nós confirmamos por WhatsApp.</p>
+
+    <form class="booking-form reveal" id="bookingForm">
+      <input type="text"  name="nome"    placeholder="Nome do dono" required />
+      <input type="text"  name="pet"     placeholder="Nome do pet"  required />
+      <select name="servico">
+        <option value="">Escolha o serviço</option>
+        <option>Banho completo</option>
+        <option>Tosa higiênica</option>
+        <option>Tosa completa</option>
+        <option>Limpeza dental</option>
+        <option>Pacote mensal</option>
+      </select>
+      <button type="submit" class="btn btn-white">Agendar agora ↗</button>
+    </form>
+
+    <p id="formMsg" style="color:#A8E6C3; margin-top:20px; display:none;">
+      ✅ Recebemos seu pedido! Entraremos em contato em breve pelo WhatsApp.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer id="contato">
+  <div class="container">
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        <div class="footer-logo-text">🐩 Dolly</div>
+        <p class="footer-desc">Banho &amp; Tosa com amor e profissionalismo desde 2016. Seu pet em boas mãos.</p>
+        <div class="social-links" style="margin-top:20px;">
+          <a href="#" class="social-link">📸</a>
+          <a href="#" class="social-link">💬</a>
+          <a href="#" class="social-link">👍</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#servicos">Banho completo</a></li>
+          <li><a href="#servicos">Tosa higiênica</a></li>
+          <li><a href="#servicos">Tosa completa</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Horários</h4>
+        <ul>
+          <li><a href="#">Seg – Sex: 8h às 19h</a></li>
+          <li><a href="#">Sábados: 9h às 17h</a></li>
+          <li><a href="#">Domingos: fechado</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="tel:+55041997663956">📞 (41) 99766-3956</a></li>
+          <li><a href="https://wa.me/041997663956">💬 WhatsApp</a></li>
+          <li><a href="mailto:dolly@email.com">✉️ dolly@email.com</a></li>
+          <li><a href="#">📍 Tatuquara, Curitiba - PR</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Banho e Tosa Dolly · Todos os direitos reservados</span>
+      <span>Feito com 🐾 e muito amor</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- WhatsApp flutuante -->
+<a href="https://wa.me/041997663956" class="wa-float" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  💬
+</a>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.style.boxShadow = window.scrollY > 20
+      ? '0 2px 24px rgba(124,74,45,.10)'
+      : 'none';
+  });
+
+  /* ── Menu mobile ── */
+  const menu    = document.getElementById('mobileMenu');
+  const burger  = document.getElementById('hamburger');
+  const btnClose = document.getElementById('mobileClose');
+  burger.addEventListener('click', () => menu.classList.add('open'));
+  btnClose.addEventListener('click', () => menu.classList.remove('open'));
+  function closeMobile() { menu.classList.remove('open'); }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        const delay = e.target.closest('.services-grid, .testi-grid, .features')
+          ? Array.from(e.target.parentElement.children).indexOf(e.target) * 80
+          : 0;
+        setTimeout(() => e.target.classList.add('visible'), delay);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const msg = document.getElementById('formMsg');
+    msg.style.display = 'block';
+    this.reset();
+    /* (revisar) — integrar com backend real ou API do WhatsApp Business */
+  });
+</script>
+
+
+</body>
+</html>
